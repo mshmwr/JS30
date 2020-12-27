@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+<script>
+  function playSound(e){
+    //按下key
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`); //獲取對應key的div
+    //播放聲音
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`) //獲取audio
+    
+    if(!audio) {
+      console.log('no audio');
+      return; //沒有對應的audio則return
+    }
+    audio.currentTime = 0; //按下key立刻從頭播放
+    audio.play();
+
+    //添加效果: 按下key後，在div加上播放的css效果
+    key.classList.add('playing');
+  }
+
+  function removeTransition(e){
+    if (e.propertyName !== 'transform') return; //只刪除一次播放的css效果
+    e.target.classList.remove('playing'); //刪除播放的css效果
+  }
+
+  window.addEventListener('keydown', playSound) //新增keydown事件
+  /*效果播放完畢後，刪除加上的css效果*/
+  //查詢每個class是否有播放完畢的效果
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+
+</script>
+
+
+</body>
+</html>
